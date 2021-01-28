@@ -1,0 +1,57 @@
+body {
+    position: relative;
+    overflow: hidden;
+}
+
+.grid-container {
+    margin-top: 3rem;
+}
+
+#blackjack-result {
+    position: absolute;
+    right: -10%;
+    top: 5%;
+    transition: right .3s ease-in;
+    background: map-get($foundation-palette, "secondary");
+    padding: 0.75rem 1.5rem;
+    border-left: 5px solid #fff;
+    font-size: 1.25rem;
+
+    &.active {
+        right: 0;
+    }
+
+    &.win {
+        border-color: green;
+    }
+
+    &.lose {
+        border-color: red;
+    }
+}
+
+.blackjack-table {
+    background: map-get($foundation-palette, "secondary");
+    padding: 2rem;
+
+    #blackjack-player, #blackjack-dealer {
+        min-height: 11rem;
+    }
+
+    img {
+        max-width: 7rem;
+        margin: 0.5rem;
+    }
+
+    .blackjack-buttons {
+        background: map-get($foundation-palette, "third");
+        margin-top: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        button {
+            margin: 0.75rem 0.5rem;
+        }
+    }
+}

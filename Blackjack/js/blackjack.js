@@ -4,6 +4,9 @@ function blackjack (hitButton, standButton, resetButton, resultNot) {
     this.resetButton = document.getElementById(resetButton);
     this.resultNot = document.getElementById(resultNot);
 
+    this.dealerParent = document.getElementById("blackjack-dealer");
+    this.playerParent = document.getElementById("blackjack-player");
+
     this._init();
 }
 
@@ -27,13 +30,15 @@ blackjack.prototype.startGame = function () {
 
     //Add 2 players cards
     this.addCard(this.playerCards);
+    this.render('player');
     this.addCard(this.playerCards);
+    this.render('player');
 
     //Add 2 dealer cards
     this.addCard(this.dealerCards);
+    this.render('dealer');
     this.addCard(this.dealerCards);
-
-    this.render(false);
+    this.render('dealer');
 
     if (this.calcTotal(this.playerCards) >= 21) {
         this.endGame();
@@ -100,27 +105,34 @@ blackjack.prototype.calcTotal = function (array) {
     return total;
 }
 
-blackjack.prototype.render = function (allCards) {
-    var dealerParent = document.getElementById("blackjack-dealer").getElementsByTagName('img');
-    var playerParent = document.getElementById("blackjack-player").getElementsByTagName('img');
+blackjack.prototype.render = function (type) {
 
-    for (var i = 0; i < this.dealerCards.length; i++) {
-
-        if (i == 0 && !allCards) {
-            dealerParent[i].src = "/src/gray_back.png";
-        } else {
-            dealerParent[i].src = "/src/" + this.dealerCards[i] + ".png";
-        }
+    if (type == 'player') {
+        var img = $('<img>');
+        img.attr('src', ('/src/' + this.playerCards[this.playerCards.length - 1] + '.png'));
+        img.appendTo(this.playerParent);
     }
 
-    for (var i = 0; i < this.playerCards.length; i++) {
-        playerParent[i].src = "/src/" + this.playerCards[i] + ".png";
+    if (type == 'dealer') {
+        var img = $('<img>');
+
+        if (this.dealerCards.length == 1) {
+            img.attr('src', '/src/gray_back.png');
+        } else {
+            img.attr('src', ('/src/' + this.dealerCards[this.dealerCards.length - 1] + '.png'));
+        }
+
+        img.appendTo(this.dealerParent);
+    }
+
+    if (type == 'end') {
+        this.dealerParent.firstChild.src = ('/src/' + this.dealerCards[0] + '.png');
     }
 }
 
 blackjack.prototype.hit = function () {
     this.addCard(this.playerCards);
-    this.render(false);
+    this.render('player');
 
     if (this.calcTotal(this.playerCards) >= 21) {
         this.endGame();
@@ -161,18 +173,11 @@ blackjack.prototype.reset = function () {
     this.hitButton.disabled = false;
     this.standButton.disabled = false;
 
-    this.resultNot.classList = "";
+    this.resultNot.classList = '';
     this.resultNot.innerHTML = 'Blank';
 
-    var dealerParent = document.getElementById("blackjack-dealer").getElementsByTagName('img');
-    var playerParent = document.getElementById("blackjack-player").getElementsByTagName('img');
-
-    console.log(dealerParent);
-
-    for (var i = 0; i < 7; i++) {
-        dealerParent[i].src = "/src/blank.png";
-        playerParent[i].src = "/src/blank.png";
-    }
+    this.dealerParent.innerHTML = '';
+    this.playerParent.innerHTML = '';
 
     this.startGame();
 }

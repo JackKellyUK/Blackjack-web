@@ -34,8 +34,11 @@ body {
     background: map-get($foundation-palette, "secondary");
     padding: 2rem;
 
+    #blackjack-dealer, #blackjack-player {
+        min-height: rem-calc(160);
+    }
+
     img {
-        max-width: 7rem;
         margin: 0.5rem;
     }
 

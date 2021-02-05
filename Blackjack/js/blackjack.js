@@ -107,26 +107,28 @@ blackjack.prototype.calcTotal = function (array) {
 
 blackjack.prototype.render = function (type) {
 
-    if (type == 'player') {
-        var img = $('<img>');
-        img.attr('src', ('/src/' + this.playerCards[this.playerCards.length - 1] + '.png'));
-        img.appendTo(this.playerParent);
-    }
+    switch (type) {
+        case 'end':
+            this.dealerParent.firstChild.src = ('/src/' + this.dealerCards[0] + '.png');
+            break;
 
-    if (type == 'dealer') {
-        var img = $('<img>');
+        case 'player':
+            var img = $('<img>');
+            img.attr('src', ('/src/' + this.playerCards[this.playerCards.length - 1] + '.png'));
+            img.appendTo(this.playerParent);
+            break;
+        
+        case 'dealer':
+            var img = $('<img>');
 
-        if (this.dealerCards.length == 1) {
-            img.attr('src', '/src/gray_back.png');
-        } else {
-            img.attr('src', ('/src/' + this.dealerCards[this.dealerCards.length - 1] + '.png'));
-        }
-
-        img.appendTo(this.dealerParent);
-    }
-
-    if (type == 'end') {
-        this.dealerParent.firstChild.src = ('/src/' + this.dealerCards[0] + '.png');
+            if (this.dealerCards.length == 1) {
+                img.attr('src', '/src/gray_back.png');
+            } else {
+                img.attr('src', ('/src/' + this.dealerCards[this.dealerCards.length - 1] + '.png'));
+            }
+    
+            img.appendTo(this.dealerParent);
+            break;
     }
 }
 
@@ -151,7 +153,7 @@ blackjack.prototype.endGame = function () {
         dealerTotal = this.calcTotal(this.dealerCards);
     }
 
-    this.render(true);
+    this.render('end');
 
     if (dealerTotal == playerTotal || (playerTotal > 21 && dealerTotal > 21)) {
         this.resultNot.innerHTML = '<i class="fas fa-bell"></i> You drew';
